@@ -1,7 +1,7 @@
 # CodexCue_NLP_Internship
 Join me on my NLP learning journey through this repository. Explore my internship projects, where I've applied NLP concepts to build practical solutions for sentiment analysis, email spam classification, chatbot development, movie recommendation, and keyword extraction.
 
-NLP Internship Projects
+# NLP Internship Projects:
 This repository showcases a collection of natural language processing (NLP) projects I completed during my internship at CodexCue. These projects demonstrate my ability to apply NLP techniques to various real-world tasks.
 Projects:
  * Sentiment Analysis: Developed a model to accurately classify the sentiment (positive, negative, or neutral) of text data.
