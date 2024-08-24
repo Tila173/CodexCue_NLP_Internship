@@ -9,7 +9,7 @@ Projects:
  * Chatbot Development: Created a chatbot for customer service, designed to provide informative and helpful responses to user queries.
  * Movie Recommendation System: Implemented a system that recommends movies to users based on their preferences and viewing history.
  * Keyword Extraction: Developed techniques to extract relevant keywords from articles and documents.
-Technologies Used:
+# Technologies Used:
  * Python
  * Natural Language Toolkit (NLTK)
  * TensorFlow
@@ -17,15 +17,15 @@ Technologies Used:
  * Scikit-learn
  * Other relevant libraries as needed
 
- * Explore the project directories:
+ # Explore the project directories:
    Each project has its directory containing the code, data, and documentation.
 
-Contributions:
+# Contributions:
 Contributions to this repository are welcome! Feel free to fork the project, make changes, and submit a pull request.
 
-License:
+# License:
 This project is licensed under the MIT License.
 
-Contact:
+# Contact:
 For any questions or inquiries, please feel free to contact me at tm.913.se.icup@gmail.com
 
