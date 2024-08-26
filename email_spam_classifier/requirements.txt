@@ -7,7 +7,6 @@ audioread==3.0.1
 backports.weakref==1.0.post1
 Bottleneck==1.4.0
 brotlipy==0.7.0
-clyent==1.2.2
 conda-repo-cli==1.0.75
 conda-verify==3.4.2
 constantly==15.1.0
