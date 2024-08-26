@@ -1,8 +1,0 @@
-streamlit==1.23.1  # Replace with the latest version
-plotly==5.15.0  # Replace with the latest version
-textblob==0.17.1
-wordcloud==1.9.3
-matplotlib==3.8.1
-pillow>=6.2.0,<10
-tensorflow==2.16.2
-# Add any other dependencies below
