@@ -1,8 +1,0 @@
-streamlit==1.23.1  # Replace with the latest version
-tensorflow==2.12.0  # Replace with the version you used
-plotly==5.15.0  # Replace with the latest version
-textblob==0.17.1
-wordcloud==1.9.1
-matplotlib==3.8.1
-pillow==10.0.1
-
