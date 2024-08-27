@@ -1,8 +1,5 @@
 keras==3.3.3
 pandas==2.2.2
-scikit-learn-intelex==20230426.121932
 tensorflow==2.16.1
-tensorflow-intel==2.16.1
-tensorflow-io-gcs-filesystem==0.31.0
 textblob==0.17.1
 wordcloud==1.9.3
