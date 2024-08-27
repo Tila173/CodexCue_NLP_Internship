@@ -34,7 +34,7 @@ This project is an intuitive and visually appealing web application for classify
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/YourUsername/CodexCue_NLP_Internship.git
+   git clone https://github.com/Tila173/CodexCue_NLP_Internship.git
    ```
    
 2. **Navigate to the Project Directory**:
