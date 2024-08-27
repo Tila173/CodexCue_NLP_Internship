@@ -39,7 +39,7 @@ This project is an intuitive and visually appealing web application for classify
    
 2. **Navigate to the Project Directory**:
    ```bash
-   cd CodexCue_NLP_Internship/Email Spam Classifier
+   cd CodexCue_NLP_Internship/email_spam_classifier
    ```
 
 3. **Install the Required Dependencies**:
