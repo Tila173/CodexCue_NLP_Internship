@@ -12,7 +12,7 @@ import random
 import base64
 
 # Define the file paths
-image_path = "/absolute/path/to/Tila_Muhammad.jpg"
+image_path = "email_spam_classifier/images/Tila_Muhammad.jpg"
 model_path = 'lstm_spam_classifier.keras'
 tokenizer_path = 'tokenizer.pkl'
 
