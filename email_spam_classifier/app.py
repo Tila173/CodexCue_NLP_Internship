@@ -13,8 +13,8 @@ import base64
 
 # Define the file paths
 image_path = "email_spam_classifier/images/Tila_Muhammad.jpg"
-model_path = 'lstm_spam_classifier.keras'
-tokenizer_path = 'tokenizer.pkl'
+model_path = "email_spam_classifier/model/lstm_spam_classifier.keras"
+tokenizer_path = "email_spam_classifier/model/tokenizer.pkl"
 
 # Define function to load image
 def load_image(image_path):
