@@ -1,11 +1,8 @@
 keras==3.5.0
-pandas==2.2.2
 tensorflow==2.17.0
 textblob==0.18.0.post0
 wordcloud==1.9.3
 plotly==5.23.0
 numpy==1.26.0
 matplotlib==3.6.2
-gensim==4.2.0
-scikit-learn==1.2.0
 streamlit==1.37.0
