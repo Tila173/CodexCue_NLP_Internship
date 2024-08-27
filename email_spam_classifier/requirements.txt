@@ -1,5 +1,12 @@
-keras==3.3.3
+keras==3.5.0
 pandas==2.2.2
-tensorflow==2.16.1
-textblob==0.17.1
+tensorflow==2.17.0
+textblob==0.18.0.post0
 wordcloud==1.9.3
+plotly==5.23.0
+numpy==1.23.5
+matplotlib==3.6.2
+gensim==4.2.0
+sklearn==1.2.0
+sys==3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]
+streamlit==1.37.0
