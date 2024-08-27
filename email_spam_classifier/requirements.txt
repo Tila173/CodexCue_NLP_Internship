@@ -8,5 +8,5 @@ numpy==1.23.5
 matplotlib==3.6.2
 gensim==4.2.0
 sklearn==1.2.0
-sys==3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]
+sys==3.10.11 
 streamlit==1.37.0
