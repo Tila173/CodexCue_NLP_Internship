@@ -21,10 +21,13 @@ Stemming and lemmatization to reduce words to their base forms.
 - ***Logistic Regression:*** A Logistic Regression model is trained on the preprocessed data to predict the sentiment. The model is evaluated using metrics such as accuracy, precision, and recall.
 
 **4. Performance Metrics Visualization**
-- ***Model Performance:*** We display key model performance metrics (Accuracy, Precision, Recall) using Plotly's table feature, ensuring the results are both informative and aesthetically pleasing.
+- ***Model Performance:*** We display key model performance metrics (Accuracy, Precision, Recall) using Plotly's table feature, ensuring the results are informative and aesthetically pleasing.
 - ***Confusion Matrix:*** The confusion matrix is presented in a visually enhanced table format, allowing for a clear understanding of the model's prediction performance.
 
 **5. Interactive Sentiment Analysis**
-- ***User Input:*** An interactive tool is developed using widgets that allows users to input text and receive sentiment predictions in real-time.
+- ***User Input:*** An interactive tool is developed using widgets that allow users to input text and receive sentiment predictions in real time.
 - ***Feedback Loop:*** Users can provide feedback on the predicted sentiment, and this feedback is used to refine and improve the model.
 - ***Sentiment Distribution:*** The tool also visualizes the distribution of sentiments as the user continues to input new text.
+
+## How to Run the Project
+Install Required Libraries: Ensure you have all the required Python libraries installed. You can install them using the following command:
