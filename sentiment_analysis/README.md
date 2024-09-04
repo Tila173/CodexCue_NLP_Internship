@@ -6,21 +6,21 @@ This project is designed to predict the sentiment of text data (positive, negati
 
 **1. Data Preprocessing**
 - ***Loading the Dataset:*** We start by loading the dataset, which includes columns like target, ids, date, flag, user, and text. After loading, we inspect the dataset's structure, identify missing values, and drop unnecessary columns.
-Text Cleaning: The text data undergoes extensive preprocessing. This includes:
+- ***Text Cleaning:*** The text data undergoes extensive preprocessing. This includes:
 Removing URLs, mentions, HTML tags, punctuation, special characters, extra whitespace, emojis, and numbers.
 Converting text to lowercase.
 Tokenization and removal of stopwords.
 Stemming and lemmatization to reduce words to their base forms.
-- **2. Data Visualization**
-Word Cloud: We generate a word cloud to visualize the most common words in the dataset, providing an intuitive understanding of the text's content.
-Correlation Matrix: Using Plotly, we create a visually appealing heatmap of the correlation matrix to explore relationships between numeric features in the dataset.
-- **3. Modeling**
-TF-IDF Vectorization: The text data is transformed into numerical features using TF-IDF vectorization, focusing on both unigrams and bigrams.
-Logistic Regression: A Logistic Regression model is trained on the preprocessed data to predict the sentiment. The model is evaluated using metrics such as accuracy, precision, and recall.
-- **4. Performance Metrics Visualization**
-Model Performance: We display key model performance metrics (Accuracy, Precision, Recall) using Plotly's table feature, ensuring the results are both informative and aesthetically pleasing.
-Confusion Matrix: The confusion matrix is presented in a visually enhanced table format, allowing for a clear understanding of the model's prediction performance.
-- **5. Interactive Sentiment Analysis**
-User Input: An interactive tool is developed using widgets that allows users to input text and receive sentiment predictions in real-time.
-Feedback Loop: Users can provide feedback on the predicted sentiment, and this feedback is used to refine and improve the model.
-Sentiment Distribution: The tool also visualizes the distribution of sentiments as the user continues to input new text.
+**2. Data Visualization**
+- ***Word Cloud:*** We generate a word cloud to visualize the most common words in the dataset, providing an intuitive understanding of the text's content.
+- ***Correlation Matrix:*** Using Plotly, we create a visually appealing heatmap of the correlation matrix to explore relationships between numeric features in the dataset.
+**3. Modeling**
+- ***TF-IDF Vectorization:*** The text data is transformed into numerical features using TF-IDF vectorization, focusing on both unigrams and bigrams.
+- ***Logistic Regression:*** A Logistic Regression model is trained on the preprocessed data to predict the sentiment. The model is evaluated using metrics such as accuracy, precision, and recall.
+**4. Performance Metrics Visualization**
+- ***Model Performance:*** We display key model performance metrics (Accuracy, Precision, Recall) using Plotly's table feature, ensuring the results are both informative and aesthetically pleasing.
+- ***Confusion Matrix:*** The confusion matrix is presented in a visually enhanced table format, allowing for a clear understanding of the model's prediction performance.
+**5. Interactive Sentiment Analysis**
+- ***User Input:*** An interactive tool is developed using widgets that allows users to input text and receive sentiment predictions in real-time.
+- ***Feedback Loop:*** Users can provide feedback on the predicted sentiment, and this feedback is used to refine and improve the model.
+- ***Sentiment Distribution:*** The tool also visualizes the distribution of sentiments as the user continues to input new text.
