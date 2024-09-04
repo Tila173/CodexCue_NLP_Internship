@@ -4,7 +4,7 @@ Welcome to the Sentiment Analysis Project! This repository showcases a comprehen
 ### Project Overview:
 This project is designed to predict the sentiment of text data (positive, negative, or neutral) using Natural Language Processing (NLP) techniques and Machine Learning models. The key components of this project include:
 
-- **1. Data Preprocessing**
+**1. Data Preprocessing**
 - ***Loading the Dataset:*** We start by loading the dataset, which includes columns like target, ids, date, flag, user, and text. After loading, we inspect the dataset's structure, identify missing values, and drop unnecessary columns.
 Text Cleaning: The text data undergoes extensive preprocessing. This includes:
 Removing URLs, mentions, HTML tags, punctuation, special characters, extra whitespace, emojis, and numbers.
