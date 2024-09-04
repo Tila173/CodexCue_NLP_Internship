@@ -30,4 +30,5 @@ Stemming and lemmatization to reduce words to their base forms.
 - ***Sentiment Distribution:*** The tool also visualizes the distribution of sentiments as the user continues to input new text.
 
 ## How to Run the Project
-Install Required Libraries: Ensure you have all the required Python libraries installed. You can install them using the following command:
+***Install Required Libraries:*** Ensure you have all the required Python libraries installed. You can install them using the following command:
+pip install -r requirements.txt
