@@ -1,7 +1,7 @@
 # Sentiment Analysis Project
 Welcome to the Sentiment Analysis Project! This repository showcases a comprehensive approach to analyzing sentiments in textual data. The project covers everything from data preprocessing to interactive sentiment analysis and visualization.
 
-Project Overview
+### Project Overview:
 This project is designed to predict the sentiment of text data (positive, negative, or neutral) using Natural Language Processing (NLP) techniques and Machine Learning models. The key components of this project include:
 
 1. Data Preprocessing
