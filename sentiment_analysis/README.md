@@ -25,10 +25,12 @@ Stemming and lemmatization to reduce words to their base forms.
 - ***Confusion Matrix:*** The confusion matrix is presented in a visually enhanced table format, allowing for a clear understanding of the model's prediction performance.
 
 **5. Interactive Sentiment Analysis**
-- ***User Input:*** An interactive tool is developed using widgets that allow users to input text and receive sentiment predictions in real time.
+- ***User Input:*** An interactive tool is developed using widgets allowing users to input text and receive real-time sentiment predictions.
 - ***Feedback Loop:*** Users can provide feedback on the predicted sentiment, and this feedback is used to refine and improve the model.
 - ***Sentiment Distribution:*** The tool also visualizes the distribution of sentiments as the user continues to input new text.
 
 ## How to Run the Project
 ***Install Required Libraries:*** Ensure you have all the required Python libraries installed. You can install them using the following command:
 pip install -r requirements.txt
+***Run the Notebook:*** Launch the Jupyter Notebook provided in the repository to explore the project step-by-step. You can interact with the sentiment analysis tool directly within the notebook.
+***Analyze Your Own Data:*** Modify the code to load your own dataset and analyze the sentiments of your text data.
