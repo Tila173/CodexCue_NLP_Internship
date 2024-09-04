@@ -1,4 +1,4 @@
-Sentiment Analysis Project
+# Sentiment Analysis Project
 Welcome to the Sentiment Analysis Project! This repository showcases a comprehensive approach to analyzing sentiments in textual data. The project covers everything from data preprocessing to interactive sentiment analysis and visualization.
 
 Project Overview
