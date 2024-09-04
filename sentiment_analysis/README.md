@@ -50,9 +50,9 @@ This project is a robust example of how NLP techniques can be applied to perform
 Feel free to explore the code, modify it, and apply it to your text datasets. Contributions and feedback are always welcome!
 
 ## Contact
-GitHub Repository: [Link to Repository]
-Author: Tila Muhammad
-Contact: tm.913.se.icup@gmail.com
+* GitHub Repository: https://github.com/Tila173/CodexCue_NLP_Internship/tree/main/sentiment_analysis
+* Author: Tila Muhammad
+* Contact: tm.913.se.icup@gmail.com
 
 
 
