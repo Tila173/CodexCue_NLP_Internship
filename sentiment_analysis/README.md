@@ -32,5 +32,7 @@ Stemming and lemmatization to reduce words to their base forms.
 ## How to Run the Project
 ***Install Required Libraries:*** Ensure you have all the required Python libraries installed. You can install them using the following command:
 pip install -r requirements.txt
+
 ***Run the Notebook:*** Launch the Jupyter Notebook provided in the repository to explore the project step-by-step. You can interact with the sentiment analysis tool directly within the notebook.
+
 ***Analyze Your Own Data:*** Modify the code to load your own dataset and analyze the sentiments of your text data.
