@@ -8,8 +8,6 @@ import joblib
 import plotly.graph_objects as go
 import pandas as pd
 import io
-import tarfile
-import os
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
@@ -94,7 +92,6 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
-    /* Navbar Styles */
     .navbar {
         background-color: white;
         padding: 10px;
@@ -103,8 +100,7 @@ st.markdown("""
         top: 0;
         z-index: 1000;
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        align-items: center; /* Align items vertically center */
         border-bottom: 1px solid #ddd;
     }
     .navbar img.logo {
@@ -199,25 +195,6 @@ st.markdown("""
         from, to { border-color: transparent; }
         50% { border-color: #007bff; }
     }
-    @media (max-width: 768px) {
-        .navbar a {
-            font-size: 14px;
-            padding: 8px;
-        }
-        .stButton > button {
-            font-size: 14px;
-            padding: 8px 16px;
-        }
-        .typewriter h1 {
-            font-size: 28px;
-        }
-        .table-container {
-            padding: 15px;
-        }
-        .footer {
-            font-size: 10px;
-        }
-    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -233,71 +210,49 @@ st.markdown("""
         <a href="https://wa.link/5yslyp" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         <a href="https://www.instagram.com/wings4scholars?igsh=ODFsZWN3ZHFidGly" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
         <a href="https://www.facebook.com/wings4scholars?mibextid=ZbWKwL" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-        <a href="https://emailwarden.streamlit.app/" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email</a>
+        <a href="https://emailwarden.streamlit.app/" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email Spam App</a>
     </div>
     """, unsafe_allow_html=True)
 
-# Typewriter effect for title
-st.markdown("<div class='typewriter'><h1>Keyword Extraction Tool</h1></div>", unsafe_allow_html=True)
+# Main content
+st.markdown("<div class='typewriter'><h1>Transform Your Text into Insights</h1></div>", unsafe_allow_html=True)
+st.write("Enter text below to extract keywords:")
 
-# File uploader
-st.sidebar.header("Upload a Text File")
-uploaded_file = st.sidebar.file_uploader("Choose a file", type=['txt', 'pdf', 'docx'])
+# Text input
+input_text = st.text_area("Text Input", height=300)
 
-if uploaded_file:
-    # Extract text based on file type
-    text = ""
-    if uploaded_file.type == "text/plain":
-        text = uploaded_file.read().decode("utf-8")
-    elif uploaded_file.type == "application/pdf":
-        from PyPDF2 import PdfReader
-        pdf = PdfReader(uploaded_file)
-        text = "\n".join([page.extract_text() for page in pdf.pages])
-    elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        import docx
-        doc = docx.Document(uploaded_file)
-        text = "\n".join([para.text for para in doc.paragraphs])
-    
-    if text:
-        st.write("### Extracted Text")
-        st.write(text)
-
+if st.button("Extract Keywords"):
+    if input_text:
         # Extract keywords
-        keywords = get_keywords(text)
-        st.write("### Top Keywords")
+        keywords = get_keywords(input_text)
+        # Display keywords
+        st.subheader("Top Keywords")
         st.write(keywords)
-
-        # Display WordCloud
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+        
+        # Display word cloud
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(keywords)
         plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
-        plt.show()
         st.pyplot(plt)
-
-        # Display keyword score distribution as a bar chart
-        if keywords:
-            df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
-            fig = go.Figure([go.Bar(x=df['Keyword'], y=df['Score'], marker=dict(color='rgba(55, 83, 109, 0.7)'))])
-            fig.update_layout(title_text='Keyword Score Distribution')
-            st.plotly_chart(fig)
-
-        # Display table with keywords
-        st.write("### Keywords Table")
-        keyword_df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
-        st.write(keyword_df)
-
-        # Highlight keywords in text
-        highlighted_text = highlight_keywords(text, keywords.keys())
-        st.write("### Highlighted Text")
-        st.markdown(highlighted_text, unsafe_allow_html=True)
-
-        # Display synonyms
-        st.write("### Keyword Synonyms")
-        for keyword in keywords.keys():
-            synonyms = get_synonyms(keyword)
-            if synonyms:
-                st.write(f"**{keyword}:** {', '.join(synonyms)}")
-
-else:
-    st.write("Upload a file to extract keywords.")
+        
+        # Display keyword score distribution
+        st.subheader("Keyword Score Distribution")
+        df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
+        fig = go.Figure([go.Bar(x=df['Keyword'], y=df['Score'])])
+        fig.update_layout(title='Keyword Scores', xaxis_title='Keyword', yaxis_title='Score')
+        st.plotly_chart(fig)
+        
+        # Display highlighted text
+        st.subheader("Highlighted Text")
+        highlighted_text = highlight_keywords(input_text, keywords.keys())
+        st.markdown(f"<div>{highlighted_text}</div>", unsafe_allow_html=True)
+    else:
+        st.warning("Please enter some text to extract keywords.")
+        
+# Footer
+st.markdown("""
+    <div class="footer">
+        <p>&copy; 2024 Tila Muhammad | Model used: TF-IDF with CountVectorizer and TfidfTransformer. All improvements and development by Tila Muhammad.</p>
+    </div>
+    """, unsafe_allow_html=True)
