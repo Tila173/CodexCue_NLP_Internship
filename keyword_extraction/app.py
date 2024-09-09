@@ -36,7 +36,7 @@ with open(vectorizer_path, 'rb') as f:
     count_vectorizer = pickle.load(f)
 
 # Download necessary NLTK data
-nltk.download('punkt')
+nltk.download()
 nltk.download('stopwords')
 nltk.download('wordnet')
 
