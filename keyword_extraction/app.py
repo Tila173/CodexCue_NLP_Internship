@@ -34,12 +34,15 @@ tfidf_transformer = joblib.load(tfidf_transformer_path)
 
 
 # Download necessary NLTK data
-try:
-    nltk.download('punkt')
-    nltk.download('stopwords')
-    nltk.download('wordnet')
-except Exception as e:
-    print(f"Error downloading NLTK data: {e}")
+def setup_nltk():
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        print("Punkt tokenizer not found. Downloading...")
+        nltk.download('punkt')
+
+# Call setup function at the beginning
+setup_nltk()
 
 # Initialize stopwords and lemmatizer
 stop_words = set(stopwords.words('english'))
