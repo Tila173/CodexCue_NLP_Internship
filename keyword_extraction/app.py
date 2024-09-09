@@ -210,7 +210,7 @@ st.markdown("""
             Keyword Extraction Tool
         </div>
         <a href="https://github.com/Tila173" target="_blank" class="github"><i class="fa-brands fa-github"></i> GitHub</a>
-        <a href="www.linkedin.com/in/tila-muhammad-b77498240" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        <a href="https://www.linkedin.com/in/tila-muhammad-b77498240/" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
         <a href="https://wa.link/5yslyp" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         <a href="https://www.instagram.com/wings4scholars?igsh=ODFsZWN3ZHFidGly" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
         <a href="https://www.facebook.com/wings4scholars?mibextid=ZbWKwL" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
