@@ -1,6 +1,7 @@
 import streamlit as st
 import re
 import nltk
+nltk.download('punkt_tab')
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
