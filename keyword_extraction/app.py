@@ -8,8 +8,11 @@ import joblib
 import plotly.graph_objects as go
 import pandas as pd
 import io
+import tarfile
+import os
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+
 
 # Function to extract .tar.bz2 files
 def extract_tar_bz2(file_path, extract_to_folder):
@@ -28,6 +31,7 @@ if not os.path.exists(count_vectorizer_extract_path):
 # Load models
 cv = joblib.load(os.path.join(count_vectorizer_extract_path, 'count_vectorizer.pkl'))
 tfidf_transformer = joblib.load(tfidf_transformer_path)
+
 
 # Download necessary NLTK data
 nltk.download('punkt')
@@ -216,43 +220,87 @@ st.markdown("""
 
 # Main content
 st.markdown("<div class='typewriter'><h1>Transform Your Text into Insights</h1></div>", unsafe_allow_html=True)
-st.write("Enter text below to extract keywords:")
 
-# Text input
-input_text = st.text_area("Text Input", height=300)
+user_text = st.text_area("Enter your text here:", height=300, placeholder="Paste your text here...")
 
-if st.button("Extract Keywords"):
-    if input_text:
-        # Extract keywords
-        keywords = get_keywords(input_text)
-        # Display keywords
-        st.subheader("Top Keywords")
-        st.write(keywords)
+# Slider for number of keywords
+num_keywords = st.slider("Select number of top keywords to extract:", min_value=1, max_value=20, value=10)
+
+# Update keywords and scores in real-time
+if user_text:
+    keywords = get_keywords(user_text, topn=num_keywords)
+    df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
+
+    # Highlight keywords in the text
+    highlighted_text = highlight_keywords(user_text, keywords.keys())
+    st.markdown(f"**Highlighted Text:**<br>{highlighted_text}", unsafe_allow_html=True)
+
+    # Display Plotly table with responsive design
+    fig = go.Figure(data=[go.Table(
+        header=dict(values=['<b>Keyword</b>', '<b>Score</b>'],
+                    fill_color='#007bff',
+                    align='center',
+                    font=dict(size=16, color='white')),
+        cells=dict(values=[df['Keyword'], df['Score']],
+                   fill_color='white',
+                   align='center',
+                   font=dict(size=14, color='black'),
+                   height=40)
+    )])
+
+    fig.update_layout(
+        title="Extracted Keywords and Scores",
+        height=600,
+        paper_bgcolor='white',
+        margin=dict(l=0, r=0, t=30, b=0)
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Separate sections with a line
+    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
+
+            # Keyword Score Distribution
+    bar_fig = go.Figure([go.Bar(
+            x=df['Keyword'],
+            y=df['Score'],
+            marker_color='#007bff'
+        )])
+
+    bar_fig.update_layout(
+            title="Keyword Score Distribution",
+            xaxis_title="Keyword",
+            yaxis_title="Score",
+            paper_bgcolor='white',
+            plot_bgcolor='white',
+            margin=dict(l=0, r=0, t=30, b=50)
+        )
+
+    st.plotly_chart(bar_fig, use_container_width=True)
+
+        # Separate sections with a line
+    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
+
+        # WordCloud Section
+    st.subheader("WordCloud")
         
-        # Display word cloud
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(keywords)
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        st.pyplot(plt)
+    wordcloud = WordCloud(width=500, height=260, background_color='white', colormap='viridis').generate_from_frequencies(keywords)
         
-        # Display keyword score distribution
-        st.subheader("Keyword Score Distribution")
-        df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
-        fig = go.Figure([go.Bar(x=df['Keyword'], y=df['Score'])])
-        fig.update_layout(title='Keyword Scores', xaxis_title='Keyword', yaxis_title='Score')
-        st.plotly_chart(fig)
-        
-        # Display highlighted text
-        st.subheader("Highlighted Text")
-        highlighted_text = highlight_keywords(input_text, keywords.keys())
-        st.markdown(f"<div>{highlighted_text}</div>", unsafe_allow_html=True)
-    else:
-        st.warning("Please enter some text to extract keywords.")
-        
+        # Plot WordCloud
+    plt.figure(figsize=(6, 4))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    plt.tight_layout()
+
+        # Save WordCloud to a BytesIO object and display it with Streamlit
+    wc_image = io.BytesIO()
+    plt.savefig(wc_image, format='png')
+    wc_image.seek(0)
+    st.image(wc_image, use_column_width=True)
+
 # Footer
 st.markdown("""
     <div class="footer">
-        <p>&copy; 2024 Tila Muhammad | Model used: TF-IDF with CountVectorizer and TfidfTransformer. All improvements and development by Tila Muhammad.</p>
+        <p>&copy; 2024 Tila Muhammad. All rights reserved.</p>
     </div>
     """, unsafe_allow_html=True)
