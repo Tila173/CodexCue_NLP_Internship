@@ -73,9 +73,9 @@ def sort_coo(coo_matrix):
 # Function to get keywords from the user input text
 def get_keywords(text, topn=10):
     cleaned_text = preprocess_text(text)
-    tf_idf_vector = tfidf_transformer.transform(cv.transform([cleaned_text]))
+    tf_idf_vector = tfidf_transformer.transform(count_vectorizer.transform([cleaned_text]))
     sorted_items = sort_coo(tf_idf_vector.tocoo())
-    keywords = extract_topn_from_vector(cv.get_feature_names_out(), sorted_items, topn=topn)
+    keywords = extract_topn_from_vector(count_vectorizer.get_feature_names_out(), sorted_items, topn=topn)
     return keywords
 
 # Function to get synonyms from WordNet
@@ -213,96 +213,45 @@ st.markdown("""
         </div>
         <a href="https://github.com/Tila173" target="_blank" class="github"><i class="fa-brands fa-github"></i> GitHub</a>
         <a href="https://www.linkedin.com/in/tila-muhammad-b77498240/" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-        <a href="https://wa.link/5yslyp" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-        <a href="https://www.instagram.com/wings4scholars?igsh=ODFsZWN3ZHFidGly" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
-        <a href="https://www.facebook.com/wings4scholars?mibextid=ZbWKwL" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-        <a href="https://emailwarden.streamlit.app/" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email Spam App</a>
+        <a href="https://wa.me/+1234567890" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        <a href="https://www.instagram.com/tila_muhammad/" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="https://www.facebook.com/tila.muhammad" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
+        <a href="mailto:tila@example.com" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email</a>
     </div>
     """, unsafe_allow_html=True)
 
-# Main content
-st.markdown("<div class='typewriter'><h1>Transform Your Text into Insights</h1></div>", unsafe_allow_html=True)
+st.title('Keyword Extraction Tool')
+st.write("Extract keywords from your text input and visualize the results.")
 
-user_text = st.text_area("Enter your text here:", height=300, placeholder="Paste your text here...")
+# Input text area
+text_input = st.text_area("Enter your text here:")
 
-# Slider for number of keywords
-num_keywords = st.slider("Select number of top keywords to extract:", min_value=1, max_value=20, value=10)
+# Extract keywords button
+if st.button("Extract Keywords"):
+    if text_input:
+        st.spinner('Processing...')
+        keywords = get_keywords(text_input)
+        # Display extracted keywords
+        if keywords:
+            st.write("### Extracted Keywords:")
+            for keyword, score in keywords.items():
+                synonyms = get_synonyms(keyword)
+                st.write(f"**{keyword}**: {score} (Synonyms: {', '.join(synonyms)})")
+            # Display WordCloud
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(keywords)
+            st.image(wordcloud.to_image(), caption="Word Cloud of Keywords")
+            # Display keyword score distribution
+            fig = go.Figure([go.Bar(x=list(keywords.keys()), y=list(keywords.values()))])
+            fig.update_layout(title='Keyword Score Distribution', xaxis_title='Keyword', yaxis_title='Score')
+            st.plotly_chart(fig)
+        else:
+            st.write("No keywords extracted.")
+    else:
+        st.write("Please enter some text.")
 
-# Update keywords and scores in real-time
-if user_text:
-    keywords = get_keywords(user_text, topn=num_keywords)
-    df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
-
-    # Highlight keywords in the text
-    highlighted_text = highlight_keywords(user_text, keywords.keys())
-    st.markdown(f"**Highlighted Text:**<br>{highlighted_text}", unsafe_allow_html=True)
-
-    # Display Plotly table with responsive design
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=['<b>Keyword</b>', '<b>Score</b>'],
-                    fill_color='#007bff',
-                    align='center',
-                    font=dict(size=16, color='white')),
-        cells=dict(values=[df['Keyword'], df['Score']],
-                   fill_color='white',
-                   align='center',
-                   font=dict(size=14, color='black'),
-                   height=40)
-    )])
-
-    fig.update_layout(
-        title="Extracted Keywords and Scores",
-        height=600,
-        paper_bgcolor='white',
-        margin=dict(l=0, r=0, t=30, b=0)
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Separate sections with a line
-    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
-
-            # Keyword Score Distribution
-    bar_fig = go.Figure([go.Bar(
-            x=df['Keyword'],
-            y=df['Score'],
-            marker_color='#007bff'
-        )])
-
-    bar_fig.update_layout(
-            title="Keyword Score Distribution",
-            xaxis_title="Keyword",
-            yaxis_title="Score",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            margin=dict(l=0, r=0, t=30, b=50)
-        )
-
-    st.plotly_chart(bar_fig, use_container_width=True)
-
-        # Separate sections with a line
-    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
-
-        # WordCloud Section
-    st.subheader("WordCloud")
-        
-    wordcloud = WordCloud(width=500, height=260, background_color='white', colormap='viridis').generate_from_frequencies(keywords)
-        
-        # Plot WordCloud
-    plt.figure(figsize=(6, 4))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis('off')
-    plt.tight_layout()
-
-        # Save WordCloud to a BytesIO object and display it with Streamlit
-    wc_image = io.BytesIO()
-    plt.savefig(wc_image, format='png')
-    wc_image.seek(0)
-    st.image(wc_image, use_column_width=True)
-
-# Footer
+# Footer with copyright
 st.markdown("""
     <div class="footer">
-        <p>&copy; 2024 Tila Muhammad. All rights reserved.</p>
+        <p>&copy; 2024 Tila Muhammad. All rights reserved. Model used: CountVectorizer & TF-IDF.</p>
     </div>
     """, unsafe_allow_html=True)
