@@ -8,3 +8,5 @@ wordcloud==1.8.2
 matplotlib==3.8.1
 seaborn==0.12.2
 numpy==1.24.3
+keras==3.5.0
+tensorflow==2.17.0
