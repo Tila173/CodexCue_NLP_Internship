@@ -13,7 +13,6 @@ import os
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
-
 # Function to extract .tar.bz2 files
 def extract_tar_bz2(file_path, extract_to_folder):
     with tarfile.open(file_path, 'r:bz2') as tar:
@@ -31,7 +30,6 @@ if not os.path.exists(count_vectorizer_extract_path):
 # Load models
 cv = joblib.load(os.path.join(count_vectorizer_extract_path, 'count_vectorizer.pkl'))
 tfidf_transformer = joblib.load(tfidf_transformer_path)
-
 
 # Download necessary NLTK data
 nltk.download('punkt')
@@ -96,6 +94,7 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
+    /* Navbar Styles */
     .navbar {
         background-color: white;
         padding: 10px;
@@ -104,7 +103,8 @@ st.markdown("""
         top: 0;
         z-index: 1000;
         display: flex;
-        align-items: center; /* Align items vertically center */
+        flex-wrap: wrap;
+        justify-content: center;
         border-bottom: 1px solid #ddd;
     }
     .navbar img.logo {
@@ -199,6 +199,25 @@ st.markdown("""
         from, to { border-color: transparent; }
         50% { border-color: #007bff; }
     }
+    @media (max-width: 768px) {
+        .navbar a {
+            font-size: 14px;
+            padding: 8px;
+        }
+        .stButton > button {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+        .typewriter h1 {
+            font-size: 28px;
+        }
+        .table-container {
+            padding: 15px;
+        }
+        .footer {
+            font-size: 10px;
+        }
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -214,93 +233,71 @@ st.markdown("""
         <a href="https://wa.link/5yslyp" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         <a href="https://www.instagram.com/wings4scholars?igsh=ODFsZWN3ZHFidGly" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
         <a href="https://www.facebook.com/wings4scholars?mibextid=ZbWKwL" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-        <a href="https://emailwarden.streamlit.app/" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email Spam App</a>
+        <a href="https://emailwarden.streamlit.app/" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email</a>
     </div>
     """, unsafe_allow_html=True)
 
-# Main content
-st.markdown("<div class='typewriter'><h1>Transform Your Text into Insights</h1></div>", unsafe_allow_html=True)
+# Typewriter effect for title
+st.markdown("<div class='typewriter'><h1>Keyword Extraction Tool</h1></div>", unsafe_allow_html=True)
 
-user_text = st.text_area("Enter your text here:", height=300, placeholder="Paste your text here...")
+# File uploader
+st.sidebar.header("Upload a Text File")
+uploaded_file = st.sidebar.file_uploader("Choose a file", type=['txt', 'pdf', 'docx'])
 
-# Slider for number of keywords
-num_keywords = st.slider("Select number of top keywords to extract:", min_value=1, max_value=20, value=10)
+if uploaded_file:
+    # Extract text based on file type
+    text = ""
+    if uploaded_file.type == "text/plain":
+        text = uploaded_file.read().decode("utf-8")
+    elif uploaded_file.type == "application/pdf":
+        from PyPDF2 import PdfReader
+        pdf = PdfReader(uploaded_file)
+        text = "\n".join([page.extract_text() for page in pdf.pages])
+    elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        import docx
+        doc = docx.Document(uploaded_file)
+        text = "\n".join([para.text for para in doc.paragraphs])
+    
+    if text:
+        st.write("### Extracted Text")
+        st.write(text)
 
-# Update keywords and scores in real-time
-if user_text:
-    keywords = get_keywords(user_text, topn=num_keywords)
-    df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
+        # Extract keywords
+        keywords = get_keywords(text)
+        st.write("### Top Keywords")
+        st.write(keywords)
 
-    # Highlight keywords in the text
-    highlighted_text = highlight_keywords(user_text, keywords.keys())
-    st.markdown(f"**Highlighted Text:**<br>{highlighted_text}", unsafe_allow_html=True)
+        # Display WordCloud
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis('off')
+        plt.show()
+        st.pyplot(plt)
 
-    # Display Plotly table with responsive design
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=['<b>Keyword</b>', '<b>Score</b>'],
-                    fill_color='#007bff',
-                    align='center',
-                    font=dict(size=16, color='white')),
-        cells=dict(values=[df['Keyword'], df['Score']],
-                   fill_color='white',
-                   align='center',
-                   font=dict(size=14, color='black'),
-                   height=40)
-    )])
+        # Display keyword score distribution as a bar chart
+        if keywords:
+            df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
+            fig = go.Figure([go.Bar(x=df['Keyword'], y=df['Score'], marker=dict(color='rgba(55, 83, 109, 0.7)'))])
+            fig.update_layout(title_text='Keyword Score Distribution')
+            st.plotly_chart(fig)
 
-    fig.update_layout(
-        title="Extracted Keywords and Scores",
-        height=600,
-        paper_bgcolor='white',
-        margin=dict(l=0, r=0, t=30, b=0)
-    )
+        # Display table with keywords
+        st.write("### Keywords Table")
+        keyword_df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
+        st.write(keyword_df)
 
-    st.plotly_chart(fig, use_container_width=True)
+        # Highlight keywords in text
+        highlighted_text = highlight_keywords(text, keywords.keys())
+        st.write("### Highlighted Text")
+        st.markdown(highlighted_text, unsafe_allow_html=True)
 
-    # Separate sections with a line
-    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
+        # Display synonyms
+        st.write("### Keyword Synonyms")
+        for keyword in keywords.keys():
+            synonyms = get_synonyms(keyword)
+            if synonyms:
+                st.write(f"**{keyword}:** {', '.join(synonyms)}")
 
-            # Keyword Score Distribution
-    bar_fig = go.Figure([go.Bar(
-            x=df['Keyword'],
-            y=df['Score'],
-            marker_color='#007bff'
-        )])
-
-    bar_fig.update_layout(
-            title="Keyword Score Distribution",
-            xaxis_title="Keyword",
-            yaxis_title="Score",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            margin=dict(l=0, r=0, t=30, b=50)
-        )
-
-    st.plotly_chart(bar_fig, use_container_width=True)
-
-        # Separate sections with a line
-    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
-
-        # WordCloud Section
-    st.subheader("WordCloud")
-        
-    wordcloud = WordCloud(width=500, height=260, background_color='white', colormap='viridis').generate_from_frequencies(keywords)
-        
-        # Plot WordCloud
-    plt.figure(figsize=(6, 4))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis('off')
-    plt.tight_layout()
-
-        # Save WordCloud to a BytesIO object and display it with Streamlit
-    wc_image = io.BytesIO()
-    plt.savefig(wc_image, format='png')
-    wc_image.seek(0)
-    st.image(wc_image, use_column_width=True)
-
-# Footer
-st.markdown("""
-    <div class="footer">
-        <p>&copy; 2024 Tila Muhammad. All rights reserved.</p>
-    </div>
-    """, unsafe_allow_html=True)
+else:
+    st.write("Upload a file to extract keywords.")
