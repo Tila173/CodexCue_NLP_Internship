@@ -106,6 +106,7 @@ st.markdown("""
         top: 0;
         z-index: 1000;
         display: flex;
+        flex-wrap: wrap;
         align-items: center; /* Align items vertically center */
         border-bottom: 1px solid #ddd;
     }
@@ -120,6 +121,8 @@ st.markdown("""
         font-size: 16px;
         transition: color 0.3s, background-color 0.3s;
         font-family: 'Roboto', sans-serif;
+        display: block;
+        text-align: center;
     }
     .navbar a.github:hover {
         background-color: #333; /* GitHub color */
@@ -175,6 +178,7 @@ st.markdown("""
         border-radius: 5px;
         padding: 20px;
         margin-top: 20px;
+        overflow-x: auto;
     }
     .footer {
         font-size: 12px;
@@ -201,6 +205,24 @@ st.markdown("""
         from, to { border-color: transparent; }
         50% { border-color: #007bff; }
     }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .navbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .navbar a {
+            font-size: 14px;
+            padding: 8px;
+        }
+        .typewriter h1 {
+            font-size: 28px;
+        }
+        .stButton > button {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -216,93 +238,51 @@ st.markdown("""
         <a href="https://wa.link/5yslyp" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         <a href="https://www.instagram.com/wings4scholars?igsh=ODFsZWN3ZHFidGly" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
         <a href="https://www.facebook.com/wings4scholars?mibextid=ZbWKwL" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-        <a href="https://emailwarden.streamlit.app/" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email Spam App</a>
+        <a href="mailto:tilamuhammad173@gmail.com" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email</a>
     </div>
     """, unsafe_allow_html=True)
+
+# Typewriter effect for title
+st.markdown("<div class='typewriter'><h1>Keyword Extraction Tool</h1></div>", unsafe_allow_html=True)
 
 # Main content
-st.markdown("<div class='typewriter'><h1>Transform Your Text into Insights</h1></div>", unsafe_allow_html=True)
+st.write("### Enter Text for Keyword Extraction")
 
-user_text = st.text_area("Enter your text here:", height=300, placeholder="Paste your text here...")
+input_text = st.text_area("Enter your text below:", height=300)
 
-# Slider for number of keywords
-num_keywords = st.slider("Select number of top keywords to extract:", min_value=1, max_value=20, value=10)
-
-# Update keywords and scores in real-time
-if user_text:
-    keywords = get_keywords(user_text, topn=num_keywords)
-    df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
-
-    # Highlight keywords in the text
-    highlighted_text = highlight_keywords(user_text, keywords.keys())
-    st.markdown(f"**Highlighted Text:**<br>{highlighted_text}", unsafe_allow_html=True)
-
-    # Display Plotly table with responsive design
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=['<b>Keyword</b>', '<b>Score</b>'],
-                    fill_color='#007bff',
-                    align='center',
-                    font=dict(size=16, color='white')),
-        cells=dict(values=[df['Keyword'], df['Score']],
-                   fill_color='white',
-                   align='center',
-                   font=dict(size=14, color='black'),
-                   height=40)
-    )])
-
-    fig.update_layout(
-        title="Extracted Keywords and Scores",
-        height=600,
-        paper_bgcolor='white',
-        margin=dict(l=0, r=0, t=30, b=0)
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Separate sections with a line
-    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
-
-            # Keyword Score Distribution
-    bar_fig = go.Figure([go.Bar(
-            x=df['Keyword'],
-            y=df['Score'],
-            marker_color='#007bff'
-        )])
-
-    bar_fig.update_layout(
-            title="Keyword Score Distribution",
-            xaxis_title="Keyword",
-            yaxis_title="Score",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            margin=dict(l=0, r=0, t=30, b=50)
-        )
-
-    st.plotly_chart(bar_fig, use_container_width=True)
-
-        # Separate sections with a line
-    st.markdown("<hr style='border: 1px solid #007bff;'>", unsafe_allow_html=True)
-
-        # WordCloud Section
-    st.subheader("WordCloud")
+if st.button('Extract Keywords'):
+    if input_text:
+        keywords = get_keywords(input_text)
+        sorted_keywords = sorted(keywords.items(), key=lambda x: x[1], reverse=True)
         
-    wordcloud = WordCloud(width=500, height=260, background_color='white', colormap='viridis').generate_from_frequencies(keywords)
-        
-        # Plot WordCloud
-    plt.figure(figsize=(6, 4))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis('off')
-    plt.tight_layout()
+        # Display keyword table
+        st.write("### Extracted Keywords")
+        keyword_df = pd.DataFrame(sorted_keywords, columns=["Keyword", "Score"])
+        fig = go.Figure(data=[go.Table(
+            header=dict(values=list(keyword_df.columns),
+                        fill_color='paleturquoise',
+                        align='left'),
+            cells=dict(values=[keyword_df.Keyword, keyword_df.Score],
+                       fill_color='lavender',
+                       align='left'))
+        ])
+        st.plotly_chart(fig, use_container_width=True)
 
-        # Save WordCloud to a BytesIO object and display it with Streamlit
-    wc_image = io.BytesIO()
-    plt.savefig(wc_image, format='png')
-    wc_image.seek(0)
-    st.image(wc_image, use_column_width=True)
+        # Display word cloud
+        st.write("### Word Cloud")
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(keywords)
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis('off')
+        st.pyplot(plt)
+        
+        # Display keywords in highlighted text
+        highlighted_text = highlight_keywords(input_text, keywords.keys())
+        st.write("### Highlighted Text")
+        st.markdown(highlighted_text, unsafe_allow_html=True)
+
+    else:
+        st.warning("Please enter some text before extracting keywords.")
 
 # Footer
-st.markdown("""
-    <div class="footer">
-        <p>&copy; 2024 Tila Muhammad. All rights reserved.</p>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown("<div class='footer'>© 2024 Tila Muhammad - Keyword Extraction Tool</div>", unsafe_allow_html=True)
