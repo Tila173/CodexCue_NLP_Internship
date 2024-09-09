@@ -106,12 +106,13 @@ st.markdown("""
         top: 0;
         z-index: 1000;
         display: flex;
-        flex-wrap: wrap;
-        align-items: center; /* Align items vertically center */
+        align-items: center;
         border-bottom: 1px solid #ddd;
+        flex-wrap: wrap; /* Allow items to wrap */
+        justify-content: center; /* Center items horizontally */
     }
     .navbar img.logo {
-        height: 40px; /* Adjust logo size */
+        height: 40px;
         margin-right: 15px;
     }
     .navbar a {
@@ -121,31 +122,29 @@ st.markdown("""
         font-size: 16px;
         transition: color 0.3s, background-color 0.3s;
         font-family: 'Roboto', sans-serif;
-        display: block;
-        text-align: center;
     }
     .navbar a.github:hover {
-        background-color: #333; /* GitHub color */
+        background-color: #333;
         color: white;
     }
     .navbar a.linkedin:hover {
-        background-color: #0077b5; /* LinkedIn color */
+        background-color: #0077b5;
         color: white;
     }
     .navbar a.whatsapp:hover {
-        background-color: #25D366; /* WhatsApp color */
+        background-color: #25D366;
         color: white;
     }
     .navbar a.instagram:hover {
-        background-color: #E4405F; /* Instagram color */
+        background-color: #E4405F;
         color: white;
     }
     .navbar a.facebook:hover {
-        background-color: #4267B2; /* Facebook color */
+        background-color: #4267B2;
         color: white;
     }
     .navbar a.email:hover {
-        background-color: #FFC107; /* Email color */
+        background-color: #FFC107;
         color: black;
     }
     .navbar-brand {
@@ -178,7 +177,6 @@ st.markdown("""
         border-radius: 5px;
         padding: 20px;
         margin-top: 20px;
-        overflow-x: auto;
     }
     .footer {
         font-size: 12px;
@@ -205,11 +203,11 @@ st.markdown("""
         from, to { border-color: transparent; }
         50% { border-color: #007bff; }
     }
-    /* Responsive adjustments */
+    /* Responsive styles */
     @media (max-width: 768px) {
         .navbar {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
         }
         .navbar a {
             font-size: 14px;
@@ -221,6 +219,19 @@ st.markdown("""
         .stButton > button {
             font-size: 14px;
             padding: 8px 16px;
+        }
+    }
+    @media (max-width: 480px) {
+        .navbar a {
+            font-size: 12px;
+            padding: 6px;
+        }
+        .typewriter h1 {
+            font-size: 24px;
+        }
+        .stButton > button {
+            font-size: 12px;
+            padding: 6px 12px;
         }
     }
     </style>
@@ -236,53 +247,57 @@ st.markdown("""
         <a href="https://github.com/Tila173" target="_blank" class="github"><i class="fa-brands fa-github"></i> GitHub</a>
         <a href="https://www.linkedin.com/in/tila-muhammad-b77498240/" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
         <a href="https://wa.link/5yslyp" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-        <a href="https://www.instagram.com/wings4scholars?igsh=ODFsZWN3ZHFidGly" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
-        <a href="https://www.facebook.com/wings4scholars?mibextid=ZbWKwL" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-        <a href="mailto:tilamuhammad173@gmail.com" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email</a>
+        <a href="https://www.instagram.com/tila173/" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="https://www.facebook.com/tilamuhammad" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
+        <a href="mailto:tilamuhammad@gmail.com" target="_blank" class="email"><i class="fa-solid fa-envelope"></i> Email</a>
     </div>
     """, unsafe_allow_html=True)
 
-# Typewriter effect for title
-st.markdown("<div class='typewriter'><h1>Keyword Extraction Tool</h1></div>", unsafe_allow_html=True)
+st.title('Keyword Extraction Tool')
 
-# Main content
-st.write("### Enter Text for Keyword Extraction")
-
-input_text = st.text_area("Enter your text below:", height=300)
+input_text = st.text_area("Enter the text for keyword extraction:")
 
 if st.button('Extract Keywords'):
-    if input_text:
-        keywords = get_keywords(input_text)
-        sorted_keywords = sorted(keywords.items(), key=lambda x: x[1], reverse=True)
-        
-        # Display keyword table
-        st.write("### Extracted Keywords")
-        keyword_df = pd.DataFrame(sorted_keywords, columns=["Keyword", "Score"])
-        fig = go.Figure(data=[go.Table(
-            header=dict(values=list(keyword_df.columns),
-                        fill_color='paleturquoise',
-                        align='left'),
-            cells=dict(values=[keyword_df.Keyword, keyword_df.Score],
-                       fill_color='lavender',
-                       align='left'))
-        ])
-        st.plotly_chart(fig, use_container_width=True)
-
-        # Display word cloud
-        st.write("### Word Cloud")
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(keywords)
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        st.pyplot(plt)
-        
-        # Display keywords in highlighted text
-        highlighted_text = highlight_keywords(input_text, keywords.keys())
-        st.write("### Highlighted Text")
-        st.markdown(highlighted_text, unsafe_allow_html=True)
-
+    if input_text.strip() == "":
+        st.warning("Please enter some text.")
     else:
-        st.warning("Please enter some text before extracting keywords.")
+        with st.spinner('Extracting keywords...'):
+            # Simulate processing time
+            time.sleep(1)
+            keywords = get_keywords(input_text)
+            st.write("**Top Keywords:**")
+            keywords_df = pd.DataFrame(list(keywords.items()), columns=['Keyword', 'Score'])
+            
+            # Plotly table
+            fig = go.Figure(data=[go.Table(
+                header=dict(values=list(keywords_df.columns),
+                            fill_color='white',
+                            align='left'),
+                cells=dict(values=[keywords_df.Keyword, keywords_df.Score],
+                           fill_color='white',
+                           align='left'))
+            ])
+            st.plotly_chart(fig, use_container_width=True)
+
+            # Highlight keywords in the original text
+            highlighted_text = highlight_keywords(input_text, keywords.keys())
+            st.markdown(f"**Highlighted Text:**<br>{highlighted_text}", unsafe_allow_html=True)
+
+            # Generate word cloud
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(input_text)
+            plt.figure(figsize=(10, 5))
+            plt.imshow(wordcloud, interpolation='bilinear')
+            plt.axis('off')
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            plt.close()
+            buf.seek(0)
+            st.image(buf, use_column_width=True)
 
 # Footer
-st.markdown("<div class='footer'>© 2024 Tila Muhammad - Keyword Extraction Tool</div>", unsafe_allow_html=True)
+st.markdown("""
+    <div class="footer">
+        <p>&copy; 2024 Tila Muhammad. All rights reserved.</p>
+        <p>Model used: TF-IDF Vectorizer and Custom Preprocessing.</p>
+    </div>
+    """, unsafe_allow_html=True)
