@@ -1,8 +1,8 @@
 import streamlit as st
 import re
-import nltk
-from nltk.corpus import stopwords, wordnet
-from nltk.stem import WordNetLemmatizer
+import spacy
+#from nltk.corpus import stopwords, wordnet
+# from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import joblib
 import plotly.graph_objects as go
@@ -33,24 +33,25 @@ cv = joblib.load(os.path.join(count_vectorizer_extract_path, 'count_vectorizer.p
 tfidf_transformer = joblib.load(tfidf_transformer_path)
 
 
-# Download necessary NLTK data
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# Load the English tokenizer and lemmatizer
+nlp = spacy.load('en_core_web_sm')
 
-# Initialize stopwords and lemmatizer
-stop_words = set(stopwords.words('english'))
-lemmatizer = WordNetLemmatizer()
+# Define stopwords
+stop_words = nlp.Defaults.stop_words
 
-# Define text preprocessing function with lemmatization
 def preprocess_text(text):
+    # Convert to lowercase
     text = text.lower()
-    text = re.sub(r'\s+', ' ', re.sub(r'[^a-zA-Z]', ' ', text))
-    words = nltk.word_tokenize(text)
-    words = [word for word in words if word not in stop_words and len(word) > 3]
-    words = [lemmatizer.lemmatize(word) for word in words]
+    
+    # Use spaCy to process the text
+    doc = nlp(text)
+    
+    # Filter out punctuation, stop words, and short words, then lemmatize
+    words = [token.lemma_ for token in doc if token.is_alpha and token.text not in stop_words and len(token.text) > 3]
+    
+    # Join words into a single string
     return ' '.join(words)
-
+    
 # Function to extract top N keywords from vector
 def extract_topn_from_vector(feature_names, sorted_items, topn=10):
     sorted_items = sorted_items[:topn]
