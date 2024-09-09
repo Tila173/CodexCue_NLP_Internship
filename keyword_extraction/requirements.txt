@@ -6,4 +6,3 @@ plotly
 pandas
 matplotlib
 wordcloud
-PyPDF2
