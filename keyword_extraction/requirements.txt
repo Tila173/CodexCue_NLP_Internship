@@ -6,4 +6,5 @@ plotly
 pandas
 matplotlib
 wordcloud
+cupy
 thinc
