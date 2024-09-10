@@ -54,11 +54,6 @@ def preprocess_text(text):
     processed_text = ' '.join(words + phrases)
     return processed_text
 
-
-import os
-import joblib
-import tarfile
-
 # Define the extraction function
 def extract_tar_bz2(tar_bz2_path, extract_path):
     with tarfile.open(tar_bz2_path, 'r:bz2') as tar:
