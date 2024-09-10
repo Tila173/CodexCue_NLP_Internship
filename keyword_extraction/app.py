@@ -37,7 +37,7 @@ tfidf_transformer = joblib.load(tfidf_transformer_path)
 
 
 # Download necessary NLTK data
-#nltk.download('punkt')
+nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
