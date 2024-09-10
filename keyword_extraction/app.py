@@ -1,4 +1,4 @@
-import nltk
+import spacy
 #nltk.download('punkt', download_dir='/home/adminuser/venv/nltk_data')
 import streamlit as st
 import re
@@ -14,10 +14,8 @@ import os
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
-nltk_data_path = 'keyword_extraction/nltk_data'
-if not os.path.exists(nltk_data_path):
-    os.makedirs(nltk_data_path)
-nltk.data.path.append(os.path.abspath(nltk_data_path))
+# Load spaCy model
+nlp = spacy.load("en_core_web_sm")
 
 # Function to extract .tar.bz2 files
 def extract_tar_bz2(file_path, extract_to_folder):
@@ -38,22 +36,11 @@ cv = joblib.load(os.path.join(count_vectorizer_extract_path, 'count_vectorizer.p
 tfidf_transformer = joblib.load(tfidf_transformer_path)
 
 
-# Download necessary NLTK data
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-# Initialize stopwords and lemmatizer
-stop_words = set(stopwords.words('english'))
-lemmatizer = WordNetLemmatizer()
-
-# Define text preprocessing function with lemmatization
-def preprocess_text(text):
+def preprocess_text_spacy(text):
     text = text.lower()
     text = re.sub(r'\s+', ' ', re.sub(r'[^a-zA-Z]', ' ', text))
-    words = nltk.word_tokenize(text)
-    words = [word for word in words if word not in stop_words and len(word) > 3]
-    words = [lemmatizer.lemmatize(word) for word in words]
+    doc = nlp(text)
+    words = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct and len(token.text) > 3]
     return ' '.join(words)
 
 # Function to extract top N keywords from vector
