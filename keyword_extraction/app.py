@@ -55,6 +55,15 @@ def preprocess_text(text):
     return processed_text
 
 
+import os
+import joblib
+import tarfile
+
+# Define the extraction function
+def extract_tar_bz2(tar_bz2_path, extract_path):
+    with tarfile.open(tar_bz2_path, 'r:bz2') as tar:
+        tar.extractall(path=extract_path)
+
 # Paths to model files
 count_vectorizer_path = 'keyword_extraction/model/count_vectorizer.tar.bz2'
 count_vectorizer_extract_path = 'keyword_extraction/model/cv'
@@ -67,7 +76,6 @@ if not os.path.exists(count_vectorizer_extract_path):
 # Load models
 cv = joblib.load(os.path.join(count_vectorizer_extract_path, 'count_vectorizer.pkl'))
 tfidf_transformer = joblib.load(tfidf_transformer_path)
-
 
 def preprocess_text_spacy(text):
     text = text.lower()
