@@ -1,6 +1,7 @@
+import nltk
+nltk.download('punkt')
 import streamlit as st
 import re
-import nltk
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -34,7 +35,7 @@ tfidf_transformer = joblib.load(tfidf_transformer_path)
 
 
 # Download necessary NLTK data
-nltk.download('punkt')
+#nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
