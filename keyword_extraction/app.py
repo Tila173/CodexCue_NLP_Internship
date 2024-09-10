@@ -27,6 +27,8 @@ nltk.download('punkt', download_dir=nltk_data_dir)
 
 # Append the custom directory to NLTK's data path
 nltk.data.path.append(nltk_data_dir)
+print("NLTK Data Paths:", nltk.data.path)
+
 
 
 # Function to extract .tar.bz2 files
