@@ -13,11 +13,9 @@ import tarfile
 import os
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-app_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Set NLTK's data path to the 'nltk_data' directory within your app
-nltk_data_dir = os.path.join(app_dir, 'nltk_data')
-nltk.data.path.append(nltk_data_dir)
+nltk_data_path = 'keyword_extraction/nltk_data'
+nltk.data.path.append(os.path.abspath(nltk_data_path))
 
 # Function to extract .tar.bz2 files
 def extract_tar_bz2(file_path, extract_to_folder):
