@@ -15,6 +15,8 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
 nltk_data_path = 'keyword_extraction/nltk_data'
+if not os.path.exists(nltk_data_path):
+    os.makedirs(nltk_data_path)
 nltk.data.path.append(os.path.abspath(nltk_data_path))
 
 # Function to extract .tar.bz2 files
