@@ -23,7 +23,7 @@ if not os.path.exists(nltk_data_path):
 nltk.data.path.append(os.path.abspath(nltk_data_path))
 
 # Download necessary NLTK data
-nltk.download('punkt')
+nltk.download('punkt_tab')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
