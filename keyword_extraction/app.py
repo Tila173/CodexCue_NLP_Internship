@@ -1,5 +1,18 @@
 import nltk
 #nltk.download('punkt', download_dir='/home/adminuser/venv/nltk_data')
+import streamlit as st
+import re
+from nltk.corpus import stopwords, wordnet
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+import joblib
+import plotly.graph_objects as go
+import pandas as pd
+import io
+import tarfile
+import os
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 # Get the path where the app.py is located
 app_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,19 +27,6 @@ nltk.download('punkt', download_dir=nltk_data_dir)
 
 # Append the custom directory to NLTK's data path
 nltk.data.path.append(nltk_data_dir)
-import streamlit as st
-import re
-from nltk.corpus import stopwords, wordnet
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-import joblib
-import plotly.graph_objects as go
-import pandas as pd
-import io
-import tarfile
-import os
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
 
 
 # Function to extract .tar.bz2 files
