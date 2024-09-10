@@ -1,5 +1,4 @@
-import spacy
-#nltk.download('punkt', download_dir='/home/adminuser/venv/nltk_data')
+import nltk
 import streamlit as st
 import re
 from nltk.corpus import stopwords, wordnet
@@ -13,14 +12,48 @@ import tarfile
 import os
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+from nltk.util import ngrams
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import regexp_tokenize
 
-# Load spaCy model
-nlp = spacy.load("en_core_web_sm")
+# Ensure NLTK data path is set up
+nltk_data_path = 'keyword_extraction/nltk_data'
+if not os.path.exists(nltk_data_path):
+    os.makedirs(nltk_data_path)
+nltk.data.path.append(os.path.abspath(nltk_data_path))
 
-# Function to extract .tar.bz2 files
-def extract_tar_bz2(file_path, extract_to_folder):
-    with tarfile.open(file_path, 'r:bz2') as tar:
-        tar.extractall(path=extract_to_folder)
+# Download necessary NLTK data
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Initialize stopwords and lemmatizer
+stop_words = set(stopwords.words('english'))
+lemmatizer = WordNetLemmatizer()
+
+# Define text preprocessing function with advanced cleaning and tokenization
+def preprocess_text(text):
+    # Convert text to lowercase
+    text = text.lower()
+    # Remove URLs, mentions, and other non-informative elements
+    text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)  # Remove URLs
+    text = re.sub(r'@\w+', '', text)  # Remove mentions
+    # Remove non-alphabetic characters and excessive whitespace
+    text = re.sub(r'\s+', ' ', re.sub(r'[^a-zA-Z\s]', '', text))
+    # Tokenize the text
+    words = word_tokenize(text)
+    # Remove stopwords and short words
+    words = [word for word in words if word not in stop_words and len(word) > 3]
+    # Lemmatize words
+    words = [lemmatizer.lemmatize(word) for word in words]  
+    # Optionally, create bigrams or trigrams (for capturing phrases)
+    bigrams = ngrams(words, 2)
+    trigrams = ngrams(words, 3)
+    phrases = [' '.join(gram) for gram in bigrams] + [' '.join(gram) for gram in trigrams]
+    # Combine words and phrases
+    processed_text = ' '.join(words + phrases)
+    return processed_text
+
 
 # Paths to model files
 count_vectorizer_path = 'keyword_extraction/model/count_vectorizer.tar.bz2'
