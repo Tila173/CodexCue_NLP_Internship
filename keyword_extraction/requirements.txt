@@ -1,5 +1,5 @@
 ﻿streamlit
-nltk
+nltk== 3.9.1
 scikit-learn
 joblib
 plotly
