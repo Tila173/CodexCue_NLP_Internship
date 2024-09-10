@@ -1,5 +1,5 @@
 ﻿streamlit
-nltk
+spacy
 scikit-learn
 joblib
 plotly
