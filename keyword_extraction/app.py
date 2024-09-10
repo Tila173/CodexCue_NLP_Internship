@@ -1,5 +1,5 @@
 import nltk
-nltk.download('punkt')
+nltk.download('punkt', download_dir='/home/adminuser/venv/nltk_data')
 import streamlit as st
 import re
 from nltk.corpus import stopwords, wordnet
