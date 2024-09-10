@@ -1,5 +1,19 @@
 import nltk
-nltk.download('punkt', download_dir='/home/adminuser/venv/nltk_data')
+#nltk.download('punkt', download_dir='/home/adminuser/venv/nltk_data')
+# Get the path where the app.py is located
+app_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Define the path for nltk data inside the "keyword_extraction" directory
+nltk_data_dir = os.path.join(app_dir, 'nltk_data')
+
+# Create the nltk_data directory if it doesn't exist
+os.makedirs(nltk_data_dir, exist_ok=True)
+
+# Download the 'punkt' tokenizer to the 'nltk_data' directory
+nltk.download('punkt', download_dir=nltk_data_dir)
+
+# Append the custom directory to NLTK's data path
+nltk.data.path.append(nltk_data_dir)
 import streamlit as st
 import re
 from nltk.corpus import stopwords, wordnet
